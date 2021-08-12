@@ -28,9 +28,10 @@ void Vehicle::simulate()
     threads.emplace_back(std::thread(&Vehicle::drive, this));
 }
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "EndlessLoop"
 // virtual function which is executed in a thread
-void Vehicle::drive()
-{
+void Vehicle::drive() {
     // print id of the current thread
     std::unique_lock<std::mutex> lck(_mtx);
     std::cout << "Vehicle #" << _id << "::drive: thread id = " << std::this_thread::get_id() << std::endl;
@@ -43,8 +44,7 @@ void Vehicle::drive()
 
     // init stop watch
     lastUpdate = std::chrono::system_clock::now();
-    while (true)
-    {
+    while (true) {
         // sleep at every iteration to reduce CPU usage
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
@@ -127,3 +127,4 @@ void Vehicle::drive()
         }
     } // eof simulation loop
 }
+#pragma clang diagnostic pop
